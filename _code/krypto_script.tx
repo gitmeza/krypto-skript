@@ -1,0 +1,103 @@
+Program:
+  'begin'
+    commands*=Command
+  'end'
+;
+
+Command:
+  EncryptCommand | DecryptCommand | ConvertCommand | Assignment | Export | Print | Loop | Condition | Fizzbuzz
+;
+
+EncryptCommand:
+  'encrypt' algorithm=Algorithm ',' text=STRING
+;
+
+DecryptCommand:
+  'decrypt' algorithm=Algorithm ',' text=STRING
+;
+
+ConvertCommand:
+  'convert' conversion=Conversions ',' text=STRING
+;
+
+Algorithm:
+  aes=AES | caesar=Caesar | vigenere=Vigenere | bacon=Bacon | dabish=Dabish
+;
+
+AES:
+  'aes' key=STRING
+;
+
+Bacon:
+  'bacon'
+;
+
+Vigenere:
+  'vigenere'
+;
+
+Dabish:
+  'dabish'
+;
+
+Fizzbuzz:
+  'fizzbuzz' left=INT ',' right=INT ',' loop=INT
+;
+
+Caesar:
+  'caesar'
+;
+
+Conversions:
+  'base64' | 'decimal' | 'binary' | 'hex'
+;
+
+Expression:
+  sum=Sum | sub=Sub | product=Product | division=Division | modulo=Modulo | val=INT | var=ID
+;
+
+Assignment:
+  'let' var=ID '=' (expression=Expression | value=STRING | value=INT)
+;
+
+Sum:
+  (left=ID | left=INT) '+' (right=ID | right=INT)
+;
+
+Sub:
+  (left=ID | left=INT) '-' (right=ID | right=INT)
+;
+
+Product:
+  (left=ID | left=INT) '*' (right=ID | right=INT)
+;
+
+Division:
+  (left=ID | left=INT) '/' (right=ID | right=INT)
+;
+
+Modulo:
+  (left=ID | left=INT) '%' (right=ID | right=INT)
+;
+
+Print:
+  'print' (expression=Expression | var=ID | str=STRING)
+;
+
+Loop:
+  'loop' var=ID ':'
+  commands*=Command
+  'endloop'
+;
+
+Condition:
+  'if' (left=ID | left=INT) '==' (right=ID | left=INT) ':'
+  commands*=Command
+  ('elseif' (leftexpr=Expression | left=ID) '==' right=ID ':'
+  commands*=Command)?
+  'endif'
+;
+
+Export:
+  'export' filename=STRING
+;
