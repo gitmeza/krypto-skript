@@ -9,11 +9,11 @@ Command:
 ;
 
 EncryptCommand:
-  'encrypt' algorithm=Algorithm ',' text=STRING
+  'encrypt' algorithm=Algorithm ',' (text=STRING | var=ID)
 ;
 
 DecryptCommand:
-  'decrypt' algorithm=Algorithm ',' text=STRING
+  'decrypt' algorithm=Algorithm ',' (text=STRING | var=ID)
 ;
 
 ConvertCommand:
@@ -33,7 +33,7 @@ Bacon:
 ;
 
 Vigenere:
-  'vigenere'
+  'vigenere' ',' key=STRING
 ;
 
 Dabish:
@@ -45,7 +45,7 @@ Fizzbuzz:
 ;
 
 Caesar:
-  'caesar'
+  'caesar' ',' key=INT
 ;
 
 Conversions:
@@ -53,11 +53,11 @@ Conversions:
 ;
 
 Expression:
-  sum=Sum | sub=Sub | product=Product | division=Division | modulo=Modulo | val=INT | var=ID
+  sum=Sum | sub=Sub | product=Product | division=Division | modulo=Modulo | val=INT
 ;
 
 Assignment:
-  'let' var=ID '=' (expression=Expression | value=STRING | value=INT)
+  'let' var=ID '=' (expression=Expression | encryption=EncryptCommand | decryption=DecryptCommand | value=STRING | value=INT | rvar=ID)
 ;
 
 Sum:
