@@ -32,7 +32,7 @@ main()
 
 ```txt
 begin
-encrypt caesar, "It's hot outside"
+encrypt caesar, 4, "It's hot outside"
 end
 ```
 
