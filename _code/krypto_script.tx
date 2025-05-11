@@ -57,31 +57,31 @@ Expression:
 ;
 
 Assignment:
-  'let' var=ID '=' (expression=Expression | encryption=EncryptCommand | decryption=DecryptCommand | value=STRING | value=INT | rvar=ID)
+  'let' var=ID '=' (encryption=EncryptCommand | decryption=DecryptCommand | value=STRING | rvar=ID | num=INT) expression=Expression*
 ;
 
 Sum:
-  (left=ID | left=INT) '+' (right=ID | right=INT)
+  '+' (rightid=ID | right=INT)
 ;
 
 Sub:
-  (left=ID | left=INT) '-' (right=ID | right=INT)
+  '-' (rightid=ID | right=INT)
 ;
 
 Product:
-  (left=ID | left=INT) '*' (right=ID | right=INT)
+  '*' (rightid=ID | right=INT)
 ;
 
 Division:
-  (left=ID | left=INT) '/' (right=ID | right=INT)
+  '/' (rightid=ID | right=INT)
 ;
 
 Modulo:
-  (left=ID | left=INT) '%' (right=ID | right=INT)
+  '%' (rightid=ID | right=INT)
 ;
 
 Print:
-  'print' (expression=Expression | var=ID | str=STRING)
+  'print' (var=ID | num=INT | str=STRING) expression=Expression*
 ;
 
 Loop:
