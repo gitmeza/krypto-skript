@@ -10,12 +10,36 @@ class KryptoSkript:
         self.varmap = {}  # stores variables
         self.loop = False
 
-    def math(self, *expression):
-        com = expression[0]
-        if(com.sum):
-            return com.sum.left + com.sum.right
-        else:
-            return 1
+    def math(self, left, exp, var=False):
+        if var == True:
+            left = self.varmap.get(left)
+        for exp in exp:
+            if(exp.sum):
+                if(exp.sum.rightid):
+                    left = left + self.varmap.get(exp.sum.rightid)
+                else:
+                    left = left + exp.sum.right
+            elif(exp.sub):
+                if(exp.sub.rightid):
+                    left = left - self.varmap.get(exp.sub.rightid)
+                else:
+                    left = left - exp.sub.right
+            elif(exp.product):
+                if(exp.product.rightid):
+                    left = left * self.varmap.get(exp.product.rightid)
+                else:
+                    left = left * exp.product.right
+            elif(exp.division):
+                if(exp.division.rightid):
+                    left = left // self.varmap.get(exp.division.rightid)
+                else:
+                    left = left // exp.division.right
+            elif(exp.modulo):
+                if(exp.modulo.rightid):
+                    left = left % self.varmap.get(exp.modulo.rightid)
+                else:
+                    left = left % exp.modulo.right
+        return left
         
     def caesar_cipher(self, shift, text, decrypt=False, var=False):
         result = ""
@@ -98,15 +122,31 @@ class KryptoSkript:
             if(c.__class__.__name__ == "Assignment"): # assignment command
                 if(c.value):
                     self.varmap.update({c.var: c.value})
+                elif(c.expression):
+                    if(c.rvar):
+                        self.varmap.update({c.var: self.math(c.rvar, c.expression, True)})
+                    else:
+                        self.varmap.update({c.var: self.math(c.num, c.expression)})
+                elif(c.rvar):
+                    self.varmap.update({c.var: self.varmap.get(c.rvar)})
+                elif(c.num):
+                    self.varmap.update({c.var: c.num})
                 elif(c.encryption):
                     self.varmap.update({c.var: self.encryption_parser(c.encryption)})
                 elif(c.decryption):
                     self.varmap.update({c.var: self.decryption_parser(c.decryption)})
             if(c.__class__.__name__ == "Print"): # print command
-                if(c.var):
+                if(c.expression):
+                    if(c.var):
+                        print(self.math(c.var, c.expression, True))
+                    else:
+                        print(self.math(c.num, c.expression))
+                elif(c.var):
                     print(self.varmap.get(c.var))
                 elif(c.str):
                     print(c.str)
+                elif(c.num):
+                    print(c.num)
             if(c.__class__.__name__ == "Loop"): # for loop
                 self.loop = True
                 for x in range(0, self.varmap.get(c.var)):
